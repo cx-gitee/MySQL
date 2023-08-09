@@ -455,8 +455,165 @@ insert into app values
 ## 10关系
 
 1. 多对多
+
+   ```sql
+   create table song(
+       id int primary key auto_increment,
+       name varchar(16) not null
+   );
+   create table singer(
+       id int primary key auto_increment,
+       name varchar(16) not null
+       
+   );
+   create table song2singer(
+       id int primary key auto_increment,
+       singer_id int not null,
+       song_id int not null,
+       foreign key(singer_id) references singer(id) on delete cascade on update cascade,
+       foreign key(song_id) references song(id) on delete cascade on update cascade
+   );
+   
+   insert into song(name) values
+   ('以父之名'),
+   ('夜的第七章'),
+   ('止战之殇'),
+   ('夜曲'),
+   ('北京欢迎你');
+   
+   insert into singer(name) values
+   ('周杰伦'),
+   ('刘欢'),
+   ('韩红'),
+   ('成龙');
+   
+   insert into song2singer(singer_id, song_id) values
+   (1,1),
+   (1,2),
+   (1,3),
+   (1,4),
+   (2,5),
+   (3,5),
+   (4,5);
+   ```
+
+   
+
 2. 多对一
-3. 一对多
+
+   ```sql
+   create table emp(
+   	id int primary key,
+       name varchar(16),
+       gender enum('male','female'),
+       moblie varchar(11),
+       dep_id int,
+       foreign key(dep_id) references dep(id)
+       on delete cascade
+       on update cascade
+   );
+   ```
+
+   
+
+3. 一对一
+
+   ```sql
+   create table customer(
+       id int primary key,
+       name varchar(16),
+       gender enum('male','female'),
+       mobile varchar(11)
+   );
+   create table owner(
+   	id int primary key,
+       room_number varchar(16),
+       area int,
+       is_loan enum(true,false),
+       customer_id int unique,
+       foreign key(customer_id) references customer(id)
+       on delete cascade
+       on update cascade
+   );
+   
+   insert into customer values
+   (1,'fei','male','131'),
+   (2,'xu','female','150'),
+   (3,'tom','female','139'),
+   (4,'jack','male','135'),
+   (5,'rose','male','137');
+   
+   
+   insert into owner values
+   (1,'688',300,false,1),
+   (2,'199',180,true,2);
+   ```
+   
+   
+
+## 11. 记录的查询语法
+
+```sql
+select distinct[{去重}] <字段....> from<库名>.<表名>
+	where <条件>
+    group by <分组条件>
+    having <过滤条件>
+    order by <排序条件> {ASC | DESC} -- 默认升序ASC
+    limit n;
+```
+
+例子
+
+```sql
+create database db5;
+use db5;
+create table emp(
+	id int primary key,
+    name varchar(16),
+    gender enum('male','female') not null,
+    age int not null,
+    salary float(10, 2),
+    dep varchar(32),
+    notes varchar(64)
+);
+
+
+insert into emp(name,gender,age,salary,dep) values
+('关羽','male',20,8000,'技术部'),
+('张飞','male',25,12000,'技术部'),
+('赵云','male',19,6800,'技术部'),
+('马超','male', 26,11000,'技术部'),
+('黄忠','female',48,15000,'技术部'),
+('夏侯惇','male',36,34000,'技术部'),
+('典韦','male',19,6500,'技术部'),
+('吕布','female',20,9000,'技术部'),
+ 
+ 
+('刘备','male',32,4000,'市场部'),
+('诸葛亮','male',27,2700,'市场部'),
+('庞统','male',19,6800,'市场部'),
+('徐庶','male', 26,11000,'市场部'),
+('荀彧','female',48,15000,'市场部'),
+('鲁肃', 'male',36,34000,'市场部'),
+('司马懿','male',19,6500,'市场部'),
+ ('杨修','female',20,9000,'市场部'),
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
